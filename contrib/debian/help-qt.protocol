@@ -1,0 +1,11 @@
+[Protocol]
+exec=help-qt '%u'
+protocol=help
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false

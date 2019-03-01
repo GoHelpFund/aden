@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Help Core
+Comment=Help P2P Cryptocurrency
+Comment[de]=Verbinde mit dem Help peer-to-peer Netzwerk
+Comment[fr]=Help, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Help, eşten eşe kriptografik sanal para birimi
+Exec=help-qt %u
+Terminal=false
+Type=Application
+Icon=help128
+MimeType=x-scheme-handler/help;
+Categories=Office;Finance;

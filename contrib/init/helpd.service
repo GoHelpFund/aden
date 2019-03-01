@@ -1,0 +1,22 @@
+[Unit]
+Description=Help's distributed currency daemon
+After=network.target
+
+[Service]
+User=helpcore
+Group=helpcore
+
+Type=forking
+PIDFile=/var/lib/helpd/helpd.pid
+ExecStart=/usr/bin/helpd -daemon -pid=/var/lib/helpd/helpd.pid \
+-conf=/etc/helpcore/help.conf -datadir=/var/lib/helpd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

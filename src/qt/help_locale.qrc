@@ -1,0 +1,25 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="ar">locale/help_ar.qm</file>
+        <file alias="bg">locale/help_bg.qm</file>
+        <file alias="de">locale/help_de.qm</file>
+        <file alias="en">locale/help_en.qm</file>
+        <file alias="es">locale/help_es.qm</file>
+        <file alias="fi">locale/help_fi.qm</file>
+        <file alias="fr">locale/help_fr.qm</file>
+        <file alias="it">locale/help_it.qm</file>
+        <file alias="ja">locale/help_ja.qm</file>
+        <file alias="ko">locale/help_ko.qm</file>
+        <file alias="nl">locale/help_nl.qm</file>
+        <file alias="pl">locale/help_pl.qm</file>
+        <file alias="pt">locale/help_pt.qm</file>
+        <file alias="ru">locale/help_ru.qm</file>
+        <file alias="sk">locale/help_sk.qm</file>
+        <file alias="sv">locale/help_sv.qm</file>
+        <file alias="th">locale/help_th.qm</file>
+        <file alias="tr">locale/help_tr.qm</file>
+        <file alias="vi">locale/help_vi.qm</file>
+        <file alias="zh_CN">locale/help_zh_CN.qm</file>
+        <file alias="zh_TW">locale/help_zh_TW.qm</file>
+    </qresource>
+</RCC>

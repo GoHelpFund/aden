@@ -1,0 +1,6 @@
+usr/local/bin/help-qt usr/bin
+share/pixmaps/help32.xpm usr/share/pixmaps
+share/pixmaps/help16.xpm usr/share/pixmaps
+share/pixmaps/help128.png usr/share/pixmaps
+debian/help-qt.desktop usr/share/applications
+debian/help-qt.protocol usr/share/kde4/services/
