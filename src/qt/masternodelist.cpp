@@ -33,10 +33,10 @@ int GetOffsetFromUtc()
 }
 
 MasternodeList::MasternodeList(const PlatformStyle* platformStyle, QWidget* parent) :
-    QWidget(parent),
-    ui(new Ui::MasternodeList),
-    clientModel(0),
-    walletModel(0)
+        QWidget(parent),
+        ui(new Ui::MasternodeList),
+        clientModel(0),
+        walletModel(0)
 {
     ui->setupUi(this);
 
@@ -147,6 +147,19 @@ void MasternodeList::showContextMenuDIP3(const QPoint& point)
     QTableWidgetItem* item = ui->tableWidgetMasternodesDIP3->itemAt(point);
     if (item) contextMenuDIP3->exec(QCursor::pos());
 }
+
+static bool CheckWalletOwnsScript(const CScript& script)
+{
+    CTxDestination dest;
+    if (ExtractDestination(script, dest)) {
+        if ((boost::get<CKeyID>(&dest) && pwalletMain->HaveKey(*boost::get<CKeyID>(&dest))) || (boost::get<CScriptID>(&dest) && pwalletMain->HaveCScript(*boost::get<CScriptID>(&dest)))) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 
 void MasternodeList::StartAlias(std::string strAlias)
 {
@@ -260,7 +273,7 @@ void MasternodeList::updateMyMasternodeInfo(QString strAlias, QString strAddr, c
     QTableWidgetItem* statusItem = new QTableWidgetItem(QString::fromStdString(fFound ? CMasternode::StateToString(infoMn.nActiveState) : "MISSING"));
     QTableWidgetItem* activeSecondsItem = new QTableWidgetItem(QString::fromStdString(DurationToDHMS(fFound ? (infoMn.nTimeLastPing - infoMn.sigTime) : 0)));
     QTableWidgetItem* lastSeenItem = new QTableWidgetItem(QString::fromStdString(DateTimeStrFormat("%Y-%m-%d %H:%M",
-        fFound ? infoMn.nTimeLastPing + GetOffsetFromUtc() : 0)));
+                                                                                                   fFound ? infoMn.nTimeLastPing + GetOffsetFromUtc() : 0)));
     QTableWidgetItem* pubkeyItem = new QTableWidgetItem(QString::fromStdString(fFound ? CBitcoinAddress(infoMn.keyIDCollateralAddress).ToString() : ""));
 
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 0, aliasItem);
@@ -339,8 +352,8 @@ void MasternodeList::updateNodeList()
     // to prevent high cpu usage update only once in MASTERNODELIST_UPDATE_SECONDS seconds
     // or MASTERNODELIST_FILTER_COOLDOWN_SECONDS seconds after filter was last changed
     int64_t nSecondsToWait = fFilterUpdated
-                                 ? nTimeFilterUpdated - GetTime() + MASTERNODELIST_FILTER_COOLDOWN_SECONDS
-                                 : nTimeListUpdated - GetTime() + MASTERNODELIST_UPDATE_SECONDS;
+                             ? nTimeFilterUpdated - GetTime() + MASTERNODELIST_FILTER_COOLDOWN_SECONDS
+                             : nTimeListUpdated - GetTime() + MASTERNODELIST_UPDATE_SECONDS;
 
     if (fFilterUpdated) {
         ui->countLabel->setText(QString::fromStdString(strprintf("Please wait... %d", nSecondsToWait)));
@@ -442,7 +455,26 @@ void MasternodeList::updateDIP3List()
         nextPayments.emplace(dmn->proTxHash, mnList.GetHeight() + (int)i + 1);
     }
 
+    std::set<COutPoint> setOutpts;
+    if (pwalletMain && ui->checkBoxMyMasternodesOnly->isChecked()) {
+        LOCK(pwalletMain->cs_wallet);
+        std::vector<COutPoint> vOutpts;
+        pwalletMain->ListProTxCoins(vOutpts);
+        for (const auto& outpt : vOutpts) {
+            setOutpts.emplace(outpt);
+        }
+    }
+
     mnList.ForEachMN(false, [&](const CDeterministicMNCPtr& dmn) {
+        if (pwalletMain && ui->checkBoxMyMasternodesOnly->isChecked()) {
+            LOCK(pwalletMain->cs_wallet);
+            bool fMyMasternode = setOutpts.count(dmn->collateralOutpoint) ||
+                                 pwalletMain->HaveKey(dmn->pdmnState->keyIDOwner) ||
+                                 pwalletMain->HaveKey(dmn->pdmnState->keyIDVoting) ||
+                                 CheckWalletOwnsScript(dmn->pdmnState->scriptPayout) ||
+                                 CheckWalletOwnsScript(dmn->pdmnState->scriptOperatorPayout);
+            if (!fMyMasternode) return;
+        }
         // populate list
         // Address, Protocol, Status, Active Seconds, Last Seen, Pub Key
         QTableWidgetItem* addressItem = new QTableWidgetItem(QString::fromStdString(dmn->pdmnState->addr.ToString()));
@@ -544,9 +576,9 @@ void MasternodeList::on_startButton_clicked()
 
     // Display message box
     QMessageBox::StandardButton retval = QMessageBox::question(this, tr("Confirm masternode start"),
-        tr("Are you sure you want to start masternode %1?").arg(QString::fromStdString(strAlias)),
-        QMessageBox::Yes | QMessageBox::Cancel,
-        QMessageBox::Cancel);
+                                                               tr("Are you sure you want to start masternode %1?").arg(QString::fromStdString(strAlias)),
+                                                               QMessageBox::Yes | QMessageBox::Cancel,
+                                                               QMessageBox::Cancel);
 
     if (retval != QMessageBox::Yes) return;
 
@@ -568,9 +600,9 @@ void MasternodeList::on_startAllButton_clicked()
 {
     // Display message box
     QMessageBox::StandardButton retval = QMessageBox::question(this, tr("Confirm all masternodes start"),
-        tr("Are you sure you want to start ALL masternodes?"),
-        QMessageBox::Yes | QMessageBox::Cancel,
-        QMessageBox::Cancel);
+                                                               tr("Are you sure you want to start ALL masternodes?"),
+                                                               QMessageBox::Yes | QMessageBox::Cancel,
+                                                               QMessageBox::Cancel);
 
     if (retval != QMessageBox::Yes) return;
 
@@ -592,16 +624,16 @@ void MasternodeList::on_startMissingButton_clicked()
 {
     if (!masternodeSync.IsMasternodeListSynced()) {
         QMessageBox::critical(this, tr("Command is not available right now"),
-            tr("You can't use this command until masternode list is synced"));
+                              tr("You can't use this command until masternode list is synced"));
         return;
     }
 
     // Display message box
     QMessageBox::StandardButton retval = QMessageBox::question(this,
-        tr("Confirm missing masternodes start"),
-        tr("Are you sure you want to start MISSING masternodes?"),
-        QMessageBox::Yes | QMessageBox::Cancel,
-        QMessageBox::Cancel);
+                                                               tr("Confirm missing masternodes start"),
+                                                               tr("Are you sure you want to start MISSING masternodes?"),
+                                                               QMessageBox::Yes | QMessageBox::Cancel,
+                                                               QMessageBox::Cancel);
 
     if (retval != QMessageBox::Yes) return;
 
@@ -700,6 +732,15 @@ void MasternodeList::ShowQRCode(std::string strAlias)
     dialog->setInfo(strWindowtitle, QString::fromStdString(strMNPrivKey), strHTML, strQRCodeTitle);
     dialog->show();
 }
+
+void MasternodeList::on_checkBoxMyMasternodesOnly_stateChanged(int state)
+{
+    // no cooldown
+    nTimeFilterUpdatedDIP3 = GetTime() - MASTERNODELIST_FILTER_COOLDOWN_SECONDS;
+    fFilterUpdatedDIP3 = true;
+}
+
+
 
 CDeterministicMNCPtr MasternodeList::GetSelectedDIP3MN()
 {

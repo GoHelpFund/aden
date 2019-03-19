@@ -18,7 +18,7 @@
 
 namespace Ui
 {
-class MasternodeList;
+    class MasternodeList;
 }
 
 class ClientModel;
@@ -53,13 +53,13 @@ private:
     bool fFilterUpdatedDIP3;
 
 public Q_SLOTS:
-    void updateMyMasternodeInfo(QString strAlias, QString strAddr, const COutPoint& outpoint);
+            void updateMyMasternodeInfo(QString strAlias, QString strAddr, const COutPoint& outpoint);
     void updateMyNodeList(bool fForce = false);
     void updateNodeList();
     void updateDIP3List();
 
-Q_SIGNALS:
-    void doubleClicked(const QModelIndex&);
+    Q_SIGNALS:
+            void doubleClicked(const QModelIndex&);
 
 private:
     QTimer* timer;
@@ -80,7 +80,7 @@ private:
     QString strCurrentFilterDIP3;
 
 private Q_SLOTS:
-    void showContextMenu(const QPoint&);
+            void showContextMenu(const QPoint&);
     void showContextMenuDIP3(const QPoint&);
     void on_filterLineEdit_textChanged(const QString& strFilterIn);
     void on_filterLineEditDIP3_textChanged(const QString& strFilterIn);
@@ -90,6 +90,7 @@ private Q_SLOTS:
     void on_startMissingButton_clicked();
     void on_tableWidgetMyMasternodes_itemSelectionChanged();
     void on_UpdateButton_clicked();
+    void on_checkBoxMyMasternodesOnly_stateChanged(int state);
 
     void extraInfoDIP3_clicked();
     void copyProTxHash_clicked();
