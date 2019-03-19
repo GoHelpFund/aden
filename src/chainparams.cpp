@@ -185,12 +185,12 @@ public:
         consensus.nMasternodePaymentsIncreasePeriod = 576*30; // 17280 - actual historical value
         consensus.nInstantSendConfirmationsRequired = 6;
         consensus.nInstantSendKeepLock = 24;
-        consensus.nBudgetPaymentsStartBlock = 328008; // actual historical value
-        consensus.nBudgetPaymentsCycleBlocks = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
+        consensus.nBudgetPaymentsStartBlock = 32800800; // actual historical value
+        consensus.nBudgetPaymentsCycleBlocks = 1661600; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nSuperblockStartBlock = 10000; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
+        consensus.nSuperblockStartBlock = 10000000; // The block at which 12.1 goes live (end of final 12.0 budget cycle)
         consensus.nSuperblockStartHash = uint256S("000008735f0f17c63f39fcd04e01becb920fba0886191abbfad4521bd565e262");
-        consensus.nSuperblockCycle = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
+        consensus.nSuperblockCycle = 1661600; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 20000;
         consensus.nMasternodeMinimumConfirmations = 15;
@@ -304,15 +304,19 @@ public:
         consensus.fLLMQAllowDummyCommitments = false;
 
         checkpointData = (CCheckpointData) {
-            boost::assign::map_list_of
-            (  0, uint256S("0x000003c7c7081971e51d8d48bb75be79a61f3fa1f0e95e88822d93e1e667e530"))
+                boost::assign::map_list_of
+                        (     0, uint256S("0x000003c7c7081971e51d8d48bb75be79a61f3fa1f0e95e88822d93e1e667e530"))
+                        (  1500, uint256S("0x000001499df0e0ead023a367b9ea8a2df1254e68da964a309391847f48d6b6b9"))
+                        (  5000, uint256S("0x000000246355377aa67a96ff16e64412dc9e03d215430246ebc0c1e6e9efba56"))
+                        (  9000, uint256S("0x00000038cf982a44d5d43a035dc23e8d0fa23b55bfc7f6b8c25ea2816df1ee4b"))
+                        (  9999, uint256S("0x00000048e34ac06e3bd4d50b59fb1d898c29d4e228c1e0c9289f4428ae5953b7"))
         };
 
         chainTxData = ChainTxData{
-            1551448770, // * UNIX timestamp of last known number of transactions
-            0,          // * total number of transactions between genesis and that timestamp
-                        //   (the tx=... number in the SetBestChain debug.log lines)
-            0.1         // * estimated number of transactions per second after that timestamp
+                1552804092, // * UNIX timestamp of last known number of transactions
+                15100,          // * total number of transactions between genesis and that timestamp
+                //   (the tx=... number in the SetBestChain debug.log lines)
+                0.1         // * estimated number of transactions per second after that timestamp
         };
     }
 };
@@ -445,15 +449,15 @@ public:
         consensus.fLLMQAllowDummyCommitments = true;
 
         checkpointData = (CCheckpointData) {
-            boost::assign::map_list_of
-            (    0, uint256S("0x00000a5e44bccde3ad9b350959d39f1609c18d2ab7d3643fdb97d6dd1cf8b207"))
+                boost::assign::map_list_of
+                        (    0, uint256S("0x00000a5e44bccde3ad9b350959d39f1609c18d2ab7d3643fdb97d6dd1cf8b207"))
         };
 
         chainTxData = ChainTxData{
-            1551447002, // * UNIX timestamp of last known number of transactions
-            0,       // * total number of transactions between genesis and that timestamp
-                        //   (the tx=... number in the SetBestChain debug.log lines)
-            0.01        // * estimated number of transactions per second after that timestamp
+                1551447002, // * UNIX timestamp of last known number of transactions
+                0,       // * total number of transactions between genesis and that timestamp
+                //   (the tx=... number in the SetBestChain debug.log lines)
+                0.01        // * estimated number of transactions per second after that timestamp
         };
 
     }
@@ -588,15 +592,15 @@ public:
         consensus.fLLMQAllowDummyCommitments = true;
 
         checkpointData = (CCheckpointData) {
-            boost::assign::map_list_of
-            (      0, uint256S("0x4831fc6e6a0cd2efc89991547f5bd0a70535dedadd1944b397ee11a468557405"))
-            (      1, devnetGenesis.GetHash())
+                boost::assign::map_list_of
+                        (      0, uint256S("0x4831fc6e6a0cd2efc89991547f5bd0a70535dedadd1944b397ee11a468557405"))
+                        (      1, devnetGenesis.GetHash())
         };
 
         chainTxData = ChainTxData{
-            devnetGenesis.GetBlockTime(), // * UNIX timestamp of devnet genesis block
-            2,                            // * we only have 2 coinbase transactions when a devnet is started up
-            0.01                          // * estimated number of transactions per second
+                devnetGenesis.GetBlockTime(), // * UNIX timestamp of devnet genesis block
+                2,                            // * we only have 2 coinbase transactions when a devnet is started up
+                0.01                          // * estimated number of transactions per second
         };
     }
 
@@ -702,14 +706,14 @@ public:
         consensus.fLLMQAllowDummyCommitments = true;
 
         checkpointData = (CCheckpointData){
-            boost::assign::map_list_of
-            ( 0, uint256S("0x0c2a9aaee8ff0b9ae655fb79769b70d215e3423651f3f778ba061d8887a12310"))
+                boost::assign::map_list_of
+                        ( 0, uint256S("0x0c2a9aaee8ff0b9ae655fb79769b70d215e3423651f3f778ba061d8887a12310"))
         };
 
         chainTxData = ChainTxData{
-            0,
-            0,
-            0
+                0,
+                0,
+                0
         };
 
         // Regtest Help addresses start with 'y'
@@ -756,14 +760,14 @@ const CChainParams &Params() {
 CChainParams& Params(const std::string& chain)
 {
     if (chain == CBaseChainParams::MAIN)
-            return mainParams;
+        return mainParams;
     else if (chain == CBaseChainParams::TESTNET)
-            return testNetParams;
+        return testNetParams;
     else if (chain == CBaseChainParams::DEVNET) {
-            assert(devNetParams);
-            return *devNetParams;
+        assert(devNetParams);
+        return *devNetParams;
     } else if (chain == CBaseChainParams::REGTEST)
-            return regTestParams;
+        return regTestParams;
     else
         throw std::runtime_error(strprintf("%s: Unknown chain %s.", __func__, chain));
 }
